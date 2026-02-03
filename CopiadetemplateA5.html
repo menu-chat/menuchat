@@ -48,14 +48,12 @@
 
         /* CONTENEDOR PARA LAS DOS TARJETAS */
         .page-container {
-            width: 297mm; /* Ancho A4 Horizontal */
-            height: 210mm; /* Alto A4 Horizontal */
+            width: 297mm;
+            height: 210mm;
             display: flex;
             gap: 0;
             background: white;
             box-shadow: 0 0 50px rgba(0,0,0,0.1);
-            /* SE AGREGÓ PARA EVITAR DESBORDES MILIMÉTRICOS */
-            overflow: hidden;
         }
 
         /* CADA TARJETA (MEDIA HOJA) */
@@ -149,21 +147,31 @@
             font-weight: 900;
         }
 
-        /* IMPRESIÓN */
+        /* IMPRESIÓN CON ESCALA REDUCIDA */
         @page { size: A4 landscape; margin: 0; }
         @media print {
-            body { background: white; padding: 0; margin: 0; }
+            body { 
+                background: white; 
+                padding: 0; 
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
             .control-panel { display: none; }
             .page-container { 
                 box-shadow: none; 
                 border: none;
                 width: 297mm;
                 height: 210mm;
-                /* SE AGREGARON ESTAS LÍNEAS PARA EVITAR EL CORTE EN MÓVILES */
+                /* Achicamos un 10% el contenedor entero */
+                transform: scale(0.9);
+                transform-origin: center center;
                 page-break-inside: avoid;
                 break-inside: avoid;
             }
-            .display-card { border-right: 1px dashed #eee; } /* Guía suave para corte */
+            .display-card { border-right: 1px dashed #eee; }
         }
     </style>
 </head>
@@ -247,7 +255,6 @@ Ej: https://menu-chat.github.io/turestaurante/">
                 img.src = newSrc;
                 img.onload = () => {
                     loadedCount++;
-                    // Cuando ambas imágenes cargan, disparamos la impresión
                     if (loadedCount === qrImages.length) {
                         window.print();
                     }
