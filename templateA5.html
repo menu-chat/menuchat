@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador Doble QR MenuChat (A4 Horizontal)</title>
+    <title>Generador QR Tent Card MenuChat (A4 Horizontal)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -17,89 +17,85 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f4f4f4;
-            color: var(--primary);
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
 
         .control-panel {
             background: #fff;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
             width: 100%;
-            max-width: 600px;
+            max-width: 500px;
             text-align: center;
-            z-index: 100;
         }
 
-        .control-panel label { display: block; margin-bottom: 10px; font-weight: 700; }
         .control-panel input { 
-            width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 10px; 
+            width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; 
         }
+        
         .control-panel button {
-            background: var(--accent); color: white; padding: 12px 30px; border: none; border-radius: 10px;
-            font-size: 1.1rem; font-weight: 900; cursor: pointer;
+            background: var(--accent); color: white; padding: 12px 25px; border: none; border-radius: 10px;
+            font-weight: 900; cursor: pointer; width: 100%;
         }
 
-        /* CONTENEDOR PARA LAS DOS TARJETAS */
+        /* CONTENEDOR REDUCIDO AL 90% PARA EVITAR SALTO DE HOJA */
         .page-container {
-            width: 297mm; /* Ancho A4 Horizontal */
-            height: 210mm; /* Alto A4 Horizontal */
+            width: 267mm; /* Reducido de 297mm */
+            height: 189mm; /* Reducido de 210mm */
             display: flex;
-            gap: 0;
             background: white;
-            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid #eee;
         }
 
-        /* CADA TARJETA (MEDIA HOJA) */
         .display-card {
             width: 50%;
             height: 100%;
-            padding: 40px;
+            padding: 30px; /* Un poco menos de padding */
             text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative;
-            border-right: 1px dashed #ccc; /* Guía de corte */
+            border-right: 1px dashed #ddd;
         }
 
         .display-card:last-child { border-right: none; }
 
         .top-brand {
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+            letter-spacing: 3px;
             color: #bbb;
+            text-transform: uppercase;
         }
 
         h1 {
-            font-size: 55px; 
+            font-size: 48px; /* Reducido */
             font-weight: 900;
             line-height: 0.9;
             letter-spacing: -2px;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         .sub-main {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
-            margin-top: 10px;
+            margin-top: 8px;
             color: #444;
         }
 
         .highlight {
             background-color: var(--accent);
             color: white;
-            padding: 2px 12px;
-            display: inline-block;
-            border-radius: 8px;
+            padding: 2px 10px;
+            border-radius: 6px;
         }
 
         .qr-section {
@@ -111,70 +107,71 @@
         }
 
         .qr-wrapper {
-            border: 3px solid #f0f0f0;
-            padding: 15px;
-            display: inline-block;
-            border-radius: 25px;
+            border: 3px solid #f8f8f8;
+            padding: 12px;
+            border-radius: 20px;
             background: white;
         }
 
         .qr-wrapper img {
-            width: 250px; 
-            height: 250px;
+            width: 220px; /* Reducido */
+            height: 220px;
             display: block;
         }
 
         .scan-instruction {
-            margin-top: 15px;
+            margin-top: 12px;
             font-weight: 900;
-            font-size: 16px;
+            font-size: 14px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .features {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            font-size: 12px;
+            gap: 12px;
+            font-size: 10px;
             font-weight: 800;
-            color: #888;
-            margin-bottom: 20px;
+            color: #aaa;
+            margin-bottom: 15px;
         }
 
         .footer-logo {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
         }
 
-        /* IMPRESIÓN */
-        @page { size: A4 landscape; margin: 0; }
+        /* AJUSTES CRÍTICOS PARA IMPRESIÓN MÓVIL */
+        @page { 
+            size: A4 landscape; 
+            margin: 0; 
+        }
+
         @media print {
-            body { background: white; padding: 0; }
+            body { background: white; padding: 0; margin: 0; }
             .control-panel { display: none; }
             .page-container { 
                 box-shadow: none; 
                 border: none;
-                width: 297mm;
-                height: 210mm;
+                /* Forzamos el centrado en la hoja real */
+                margin: auto; 
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
             }
-            .display-card { border-right: 1px dashed #eee; } /* Guía suave para corte */
         }
     </style>
 </head>
 <body>
 
     <div class="control-panel">
-        <label>Ingresa aquí la URL que te dimos. <br>
-Ej: https://menu-chat.github.io/turestaurante/</label>
-        <input type="text" id="menuUrl" placeholder="Ingresa aquí la URL que te dimos.
-Ej: https://menu-chat.github.io/turestaurante/">
-        <br>
-        <button onclick="generateQrCode()">GENERAR E IMPRIMIR (2 x HOJA)</button>
+        <label>Ingresa aquí la URL que te dimos. <br>Ej: https://menu-chat.github.io/turestaurante/</label>
+        <input type="text" id="menuUrl" value="https://menu-chat.github.io/menuchat/">
+        <button onclick="generateQrCode()">GENERAR E IMPRIMIR</button>
     </div>
 
     <div class="page-container" id="printableCard">
-        
         <div class="display-card">
             <div class="top-brand">Smart Menu System</div>
             <div>
@@ -183,7 +180,7 @@ Ej: https://menu-chat.github.io/turestaurante/">
             </div>
             <div class="qr-section">
                 <div class="qr-wrapper">
-                    <img class="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://menu-chat.github.io/menuchat/" alt="QR">
+                    <img class="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://menu-chat.github.io/menuchat/" alt="QR">
                 </div>
                 <p class="scan-instruction">Apuntá tu cámara aquí</p>
             </div>
@@ -205,7 +202,7 @@ Ej: https://menu-chat.github.io/turestaurante/">
             </div>
             <div class="qr-section">
                 <div class="qr-wrapper">
-                    <img class="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://menu-chat.github.io/menuchat/" alt="QR">
+                    <img class="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://menu-chat.github.io/menuchat/" alt="QR">
                 </div>
                 <p class="scan-instruction">Apuntá tu cámara aquí</p>
             </div>
@@ -218,41 +215,24 @@ Ej: https://menu-chat.github.io/turestaurante/">
                 <div class="footer-logo">MENU<span style="color: var(--accent);">CHAT</span></div>
             </div>
         </div>
-
     </div>
 
     <script>
         function generateQrCode() {
-            const urlInput = document.getElementById('menuUrl');
-            let menuUrl = urlInput.value.trim();
-
-            if (!menuUrl) {
-                alert('Por favor, ingresa una URL.');
-                return;
-            }
-
-            if (!menuUrl.startsWith('http')) {
-                menuUrl = 'https://' + menuUrl;
-            }
-
-            const qrImages = document.querySelectorAll('.qrCodeImage');
-            const newSrc = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(menuUrl)}`;
+            const url = document.getElementById('menuUrl').value.trim() || 'https://menu-chat.github.io/menuchat/';
+            const qrImages = document.querySelectorAll('.qrImg');
+            const finalUrl = url.startsWith('http') ? url : 'https://' + url;
+            const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(finalUrl)}`;
             
-            let loadedCount = 0;
+            let loaded = 0;
             qrImages.forEach(img => {
-                img.src = newSrc;
+                img.src = qrSrc;
                 img.onload = () => {
-                    loadedCount++;
-                    // Cuando ambas imágenes cargan, disparamos la impresión
-                    if (loadedCount === qrImages.length) {
-                        window.print();
-                    }
+                    loaded++;
+                    if (loaded === 2) window.print();
                 };
             });
         }
-
-        document.getElementById('menuUrl').value = 'https://menu-chat.github.io/menuchat/';
     </script>
-
 </body>
 </html>
