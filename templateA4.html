@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador QR MenuChat MAX (A4)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #000000;
+            --accent: #10a37f; /* Verde ChatGPT */
+            --bg: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f4;
+            color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .control-panel {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .control-panel label { display: block; margin-bottom: 10px; font-weight: 700; font-size: 1.1rem; }
+        .control-panel input { 
+            width: 90%; padding: 12px; margin-bottom: 15px; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; 
+        }
+        .control-panel button {
+            background: var(--accent); color: white; padding: 12px 30px; border: none; border-radius: 10px;
+            font-size: 1.1rem; font-weight: 900; cursor: pointer;
+        }
+
+        /* DISEÑO DE LA HOJA A4 - AJUSTADO -10% */
+        .display-card {
+            width: 210mm;
+            height: 297mm;
+            background: var(--bg);
+            color: var(--primary);
+            padding: 60px 40px; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+        }
+
+        .top-brand {
+            font-size: 20px; /* Reducido */
+            font-weight: 700;
+            letter-spacing: 7px;
+            text-transform: uppercase;
+            color: #bbb;
+        }
+
+        h1 {
+            font-size: 98px; /* Reducido 10% aprox */
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -4px;
+            margin-top: 30px;
+        }
+
+        .sub-main {
+            font-size: 40px; /* Reducido */
+            font-weight: 700;
+            margin-top: 15px;
+            color: #444;
+        }
+
+        .highlight {
+            background-color: var(--accent);
+            color: white;
+            padding: 4px 18px;
+            display: inline-block;
+            border-radius: 10px;
+        }
+
+        /* SECCIÓN DEL QR CON ESPACIO EXTRA */
+        .qr-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 40px; /* Espacio extra solicitado entre título y QR */
+        }
+
+        .qr-wrapper {
+            border: 4px solid #f0f0f0;
+            padding: 25px;
+            display: inline-block;
+            border-radius: 35px;
+            background: white;
+        }
+
+        .qr-wrapper img {
+            width: 380px; /* Reducido 10% aprox */
+            height: 380px;
+            display: block;
+        }
+
+        .scan-instruction {
+            margin-top: 25px;
+            font-weight: 900;
+            font-size: 25px; /* Reducido */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .bottom-info {
+            margin-bottom: 10px;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            font-size: 18px; /* Reducido */
+            font-weight: 800;
+            color: #888;
+            margin-bottom: 35px;
+        }
+
+        .footer-logo {
+            font-size: 32px; /* Reducido */
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        /* IMPRESIÓN - AJUSTE PARA EVITAR 2 HOJAS */
+        @page { size: A4 portrait; margin: 0; }
+        @media print {
+            body { background: white; padding: 0; }
+            .control-panel { display: none; }
+            .display-card { 
+                box-shadow: none; 
+                border: none; 
+                width: 210mm; 
+                height: 98vh; /* Se reduce altura para asegurar que entre en una hoja */
+                page-break-after: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <label for="menuUrl">Ingresa aquí la URL que te dimos. <br>Ej: https://menu-chat.github.io/turestaurante/</label>
+        <input type="text" id="menuUrl" placeholder="Pega la URL aquí...">
+        <br>
+        <button onclick="generateQrCode()">GENERAR E IMPRIMIR A4</button>
+    </div>
+
+    <div class="display-card" id="printableCard">
+        <div class="top-brand">Smart Menu System</div>
+
+        <div class="main-title">
+            <h1>¿No estás<br>inspirado?</h1>
+            <div class="sub-main">Preguntale a <span class="highlight">ChatGPT</span></div>
+        </div>
+
+        <div class="qr-section">
+            <div class="qr-wrapper">
+                <img id="qrCodeImage" src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://menu-chat.github.io/menuchat/" alt="QR">
+            </div>
+            <p class="scan-instruction">Apuntá tu cámara aquí</p>
+        </div>
+
+        <div class="bottom-info">
+            <div class="features">
+                <span>• RECOMENDACIONES</span>
+                <span>• MARIDAJES</span>
+                <span>• ALÉRGENOS</span>
+            </div>
+            <div class="footer-logo">
+                MENU<span style="color: var(--accent);">CHAT</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateQrCode() {
+            const urlInput = document.getElementById('menuUrl');
+            let menuUrl = urlInput.value.trim();
+
+            if (!menuUrl) {
+                alert('Por favor, ingresa una URL.');
+                return;
+            }
+
+            if (!menuUrl.startsWith('http')) {
+                menuUrl = 'https://' + menuUrl;
+            }
+
+            const qrCodeImage = document.getElementById('qrCodeImage');
+            qrCodeImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=800x800&data=${encodeURIComponent(menuUrl)}`;
+            
+            qrCodeImage.onload = () => {
+                window.print();
+            };
+        }
+
+        document.getElementById('menuUrl').value = 'https://menu-chat.github.io/menuchat/';
+    </script>
+
+</body>
+</html>
